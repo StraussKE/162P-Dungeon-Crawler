@@ -5,8 +5,7 @@
     <ProjectGuid>056a1a86-10c3-456a-8fda-e2d39f9db14f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>Dungeon_Crawler.py</StartupFile>
-    <SearchPath>
-    </SearchPath>
+    <SearchPath>..\Dungeon Crawler</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>Dungeon Crawler</Name>
@@ -24,8 +23,11 @@
     <Compile Include="constant.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="dungeon.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Dungeon_Crawler.py" />
-    <Compile Include="HelpMenu.py">
+    <Compile Include="helpMenu.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="validation.py">

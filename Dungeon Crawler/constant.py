@@ -1,6 +1,6 @@
 ### Declaration of constant values for this application ###
 
-## Constant Integers
+## constant Integers
 
 # Maximumn dimension for a dungeon
 MAX_SIZE                = 19
@@ -27,9 +27,9 @@ RID_BOULDER             = 6
 
 # Basic dungeon dimensions
 TUTORIAL_DIMENSION      = 4
-EASY_DIMENSION          = MAX_SIZE / 2.5
-NORMAL_DIMENSION        = MAX_SIZE / 1.5
-HARD_DIMENSION          = MAX_SIZE
+EASY_DIMENSION          = 8
+NORMAL_DIMENSION_MAX    = 13
+HARD_DIMENSION_MAX      = 19
 
 ## Constand Strings
 
@@ -51,7 +51,7 @@ PLAYER                  = "You"
 
 ## Building the dungeon
 
-## Constant Characters
+## constant Characters
 
 ## navigating a single floor of the dungeon
 
@@ -65,4 +65,3 @@ EMPTY                   = '\0'
 # Text outputs
 
 STARBAR = '*******************************************************************************\n'
-

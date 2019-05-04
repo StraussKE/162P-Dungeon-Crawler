@@ -1,7 +1,7 @@
 import constant
 import validation
 
-class HelpMenu(object):
+class helpMenu(object):
     """User accessible help menu"""
 
     EXIT = 0
@@ -39,26 +39,26 @@ class HelpMenu(object):
     #not yet implemented
                 #"\t7 - |" + constant.GOBLIN + "|\tMonsters \t|" + constant.ORC + "|\n"
             
-            optionSelect = validation.intInput(HelpMenu.EXIT, HelpMenu.MAX_VALID_OPTION)
+            optionSelect = validation.intInput(helpMenu.EXIT, helpMenu.MAX_VALID_OPTION)
 
-            if (optionSelect == HelpMenu.EXIT):
+            if (optionSelect == helpMenu.EXIT):
                 print("\nFeel free to use the help menu again anytime you require. Happy adventuring!\n\n")
                 self.runHelp = False
-            elif (optionSelect == HelpMenu.EX_DUNG):
+            elif (optionSelect == helpMenu.EX_DUNG):
                 self.welcome()
-            elif (optionSelect == HelpMenu.EX_MOVE):
+            elif (optionSelect == helpMenu.EX_MOVE):
                 self.aboutMovement()
-            elif (optionSelect == HelpMenu.EX_TREAS):
+            elif (optionSelect == helpMenu.EX_TREAS):
                 self.aboutTreasure()
-            elif (optionSelect == HelpMenu.EX_STAIR):
+            elif (optionSelect == helpMenu.EX_STAIR):
                 self.aboutStairs()
-            elif (optionSelect == HelpMenu.EX_TRAP):
+            elif (optionSelect == helpMenu.EX_TRAP):
                 self.aboutTraps()
-            elif (optionSelect == HelpMenu.EX_ROCK):
+            elif (optionSelect == helpMenu.EX_ROCK):
                 self.aboutBoulders()
-            elif (optionSelect == HelpMenu.EX_MONST):
-                self.aboutMonsters()
-            elif (optionSelect == HelpMenu.EX_PORT):
+            #elif (optionSelect == helpMenu.EX_MONST):
+            #    self.aboutMonsters()
+            elif (optionSelect == helpMenu.EX_PORT):
                 self.aboutPortals ()
             else:
                 print("Error! I should not have been able to get here!.\n")
@@ -89,7 +89,7 @@ class HelpMenu(object):
                 " of the text based adventures of yore.  You are the hero.  Your purpose is to\n"
                 " avoid death and collect treasure.  The story is regrettably lacking.  This is\n"
                 " a roguelike game with a fixed quantity of floors for you to enjoy.\n"
-                " Now that you understand the premise, let us be on our way!\n\n")
+                " Now that you understand the premise, let us be on our way!\n")
         input("(Press enter to continue)")
         print(constant.STARBAR)
     
@@ -101,7 +101,7 @@ class HelpMenu(object):
               "Diagonal motion is not permitted.\n\n"
               "You have two options for controlling your character.\n\n"
               "Left handed control:\tW = up  A = left  S = down  D = right\n"
-              "Right handed control:\t8 = up  4 = left  2 = down  6 = right\n\n")
+              "Right handed control:\t8 = up  4 = left  2 = down  6 = right\n")
         input("(Press enter to continue)")
         print(constant.STARBAR)
 
@@ -111,7 +111,7 @@ class HelpMenu(object):
               "|" + constant.STAIRS_DOWN + "| indicates a downward stairway that will allow you to descend deeper\n"
               "into the dungeon.\n\n"
               "|" + constant.STAIRS_UP + "| indicates an upward stairway that will allow you to return to floors\n"
-              "previously explored.\n\n")
+              "previously explored.\n")
         input("(Press enter to continue)")
         print(constant.STARBAR)
 
@@ -120,21 +120,21 @@ class HelpMenu(object):
         print("\n|" + constant.KEY + "| Keys are required to open treasure chests.\n\n"
               "|" + constant.TREASURE + "| Treasure chests are filled with gold for you to collect.\n\n"
               "Once you have collected a treasure, you will always be given the option to quit or continue\n"
-              "exploring the dungeon.\n\n")
+              "exploring the dungeon.\n")
         input("(Press enter to continue)")
         print(constant.STARBAR)
 
     # explains about trap mechanics
     def aboutTraps (self):
         print("\n|" + constant.TRAP + "| Traps are dangerous and you will die if you step in one.\n"
-              "Avoid or disarm traps whenever possible.\n\n")
+              "Avoid or disarm traps whenever possible.\n")
         input("(Press enter to continue)")
         print(constant.STARBAR)
 
     # small rock and boulder mechanics
     def aboutBoulders (self):
         print("\n|" + constant.LARGE_BOULDER + "| Boulders are immobile obstacles that you must travel around.\n\n"
-              "\n|" + constant.SMALL_BOULDER + "| Small rocks can be pushed around and used to disarm traps.\n\n")
+              "\n|" + constant.SMALL_BOULDER + "| Small rocks can be pushed around and used to disarm traps.\n")
         input("(Press enter to continue)")
         print(constant.STARBAR)
 
@@ -146,6 +146,6 @@ class HelpMenu(object):
     def aboutPortals (self):
         print("\n|" + constant.PORTAL + "| Portals exist on the final floor of a dungeon. Stepping on the portal\n"
               "allows you to keep the treasure you've collected and continue on to another dungeon of\n"
-              "whatever difficulty level you'd like.\n\n")
+              "whatever difficulty level you'd like.\n")
         input("(Press enter to continue)")
         print(constant.STARBAR)
