@@ -17,13 +17,13 @@ class dungeon(object):
         self._create_dungeon(self.bounds)
 
     def __str__(self):
-        stringify_dung = constant.STARBAR + "\n"
+        stringify_dung = constant.STARBAR
         stringify_dung += ("You are on level " + str(self.current_floor + 1) + " of the dungeon.\n")
         stringify_dung += (constant.STARBAR + "\n")
 
-        stringify_dung += (str(self.dungeon[self.current_floor]) + "\n")
+        stringify_dung += str(self.dungeon[self.current_floor])
 
-        stringify_dung += ("\nKey:    " + constant.PLAYER + " = Hero    " + constant.TRAP 
+        stringify_dung += ("\n\nKey:    " + constant.PLAYER + " = Hero    " + constant.TRAP 
                            + " = Trap    " + constant.TREASURE + " = Treasure    "
                            + constant.SMALL_BOULDER + " = Small Rock\n" + constant.STAIRS_DOWN 
                            + " = Stairs Down    " + constant.STAIRS_UP + " = Stairs Up\n\n")
@@ -117,76 +117,3 @@ class dungeon(object):
                 this_row.append(constant.EMPTY_SPACE)
                 square_num += 1
             return this_row
-
-
-class tutorial(dungeon):
-    # Specific dungeon experience for players wishing to go through the tutorial
-    def __init__(self):
-        self.stairs_down = 1
-        self.treasure = 1
-        self.key = 1
-        self.traps = 1
-        self.small_rock = 1
-        self.boulder = 1
-        self.portal = 1
-    
-
-        
-
-    def insert_player(self)
-    self.dungeon
-
-    if (current_floor < bounds - 1)
-    {
-        placeObject(dungeon, current_floor, bounds, stairs_down, STAIRS_DOWN);
-        // we have stairs to descend further into the dungeon unless we are on the final floor
-    }
-
-    if (current_floor == 0)
-    {
-        std::cin.ignore();
-        aboutMovement();
-        aboutStairs();
-        std::cout + "\nWhy don't you try getting to the stairs on this floor?\n\n";
-    }
-
-    if (current_floor == 1)
-    {
-        placeObject(dungeon, current_floor, bounds, treasure, TREASURE);
-        // we have placed our treasure
-
-        placeObject(dungeon, current_floor, bounds, key, KEY);
-        // we have placed our key
-
-        std::cin.ignore();
-        aboutTreasure();
-
-        std::cout + "\nWhy don't you try getting the treasure from this floor?\n\n";
-
-    }
-    if (current_floor == 2)
-    {
-        placeObject(dungeon, current_floor, bounds, traps, TRAP);
-        // we have placed our traps
-
-        placeObject(dungeon, current_floor, (bounds - 1), small_rock, SMALL_BOULDER);
-        // we have small rocks
-
-        placeObject(dungeon, current_floor, bounds, boulder, LARGE_BOULDER);
-        // we have boulders
-
-        std::cin.ignore();
-        aboutTraps();
-        aboutBoulders();
-
-        std::cout + "\nWhy don't you try disarming the trap on this floor?\n\n";
-    }
-    if (current_floor == (bounds - 1))
-    {
-        placeObject(dungeon, current_floor, bounds, portal, PORTAL);
-        // we have our portal
-
-        std::cin.ignore();
-        aboutPortals();
-
-        std::cout + "\nHead through the portal to finish this tutorial.\n\n";
