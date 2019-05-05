@@ -15,20 +15,19 @@ class dungeon(object):
         self.current_floor = 0
 
         self._create_dungeon(self.bounds)
-        self.stringify_dung = ''
 
     def __str__(self):
-        self.stringify_dung += constant.STARBAR + "\n"
-        self.stringify_dung += "You are on level " + str(self.current_floor + 1) + " of the dungeon.\n"
-        self.stringify_dung += constant.STARBAR + "\n"
+        stringify_dung = constant.STARBAR + "\n"
+        stringify_dung += ("You are on level " + str(self.current_floor + 1) + " of the dungeon.\n")
+        stringify_dung += (constant.STARBAR + "\n")
 
-        self.stringify_dung += str(self.dungeon[self.current_floor]) + "\n"
+        stringify_dung += (str(self.dungeon[self.current_floor]) + "\n")
 
-        self.stringify += ("\nKey:    " + constant.PLAYER + " = Hero    " + constant.TRAP 
+        stringify_dung += ("\nKey:    " + constant.PLAYER + " = Hero    " + constant.TRAP 
                            + " = Trap    " + constant.TREASURE + " = Treasure    "
                            + constant.SMALL_BOULDER + " = Small Rock\n" + constant.STAIRS_DOWN 
                            + " = Stairs Down    " + constant.STAIRS_UP + " = Stairs Up\n\n")
-        return self.stringify_dung
+        return stringify_dung
 
     def _set_difficulty(self):
         print("\nPlease select your difficulty level. If you've never played before the tutorial\n"
@@ -70,48 +69,52 @@ class dungeon(object):
             self.boulder = 1
             self.portal = 1
 
-            self._create_floor(self.bounds)
-            self._stringify_floor =''
+            self._create_floor()
 
         def _draw_row(self, symbol):
-            self.row = '|'
-            if (row_num == -1):
-                self.row.iter = 0
-                while self.row_iter < self.bounds:
-                    self.row += symbol
-                    self.row_iter += 1
-            return self.row
+            row = '|'
+            col_num = 0
+            while col_num < self.bounds:
+                row += symbol
+                col_num += 1
+            return row
 
         def __str__(self):
             # generate the perimeter lines
-            self.perimeter = _draw_row(constant.PERIMETER_LINE)
+            perimeter = self._draw_row(constant.PERIMETER_LINE)
             #generate the lines depicting space between rows
-            self.grid_row = _draw_row(constant.GRID_SQUARE_LINE)
+            grid_row = self._draw_row(constant.GRID_SQUARE_LINE)
 
-            self.stringify_floor += perimeter
-            self.strinfigy_floor += "\n"
-            for row in iter(current_floor):
-                self.strinfify_floor += ("|" + self.current_floor[row] + "|")
-                self.stringify_floor += "\n"
-                if(row == current_floor.length):
-                    self.stringify_floor += self.perimeter
+            stringify_floor = perimeter
+            stringify_floor += "\n"
+            floor_row = 0
+            while (floor_row < self.bounds):
+                floor_column = 0
+                stringify_floor += "|"
+                while floor_column < self.bounds:
+                    stringify_floor += (self.this_floor[floor_row][floor_column] + "|")
+                    floor_column += 1
+                stringify_floor += "\n"
+                if(floor_row == self.bounds):
+                    stringify_floor += perimeter
                 else:
-                    self.stringify_floor += self.grid_row
-                    self.stringify_floor += "\n"
-            return self.stringify_floor
+                    stringify_floor += grid_row
+                    stringify_floor += "\n"
+                    floor_row += 1
+            return stringify_floor
 
         # Populates the dungeon floor with empty dungeon spaces
-        def _create_floor(self, bounds):
+        def _create_floor(self):
             row_num = 0
-            while row_num < bounds:
-                self.this_floor.append(self._generate_empty_row(bounds))
+            while row_num < self.bounds:
+                self.this_floor.append(self._generate_empty_row())
                 row_num += 1
 
-        def _generate_empty_row(self, bounds):
+        def _generate_empty_row(self):
             square_num = 0
             this_row = []
-            while square_num < bounds:
-                this_row.append(constant.EMPTY)
+            while square_num < self.bounds:
+                this_row.append(constant.EMPTY_SPACE)
                 square_num += 1
             return this_row
 
