@@ -1,21 +1,31 @@
+# Created by Katie Strauss May 2019
+
 # standard modules
 import random
 
 #user created modules
 import constant
 import validation
+import helpMenu
 
 class dungeon(object):
     """the dungeon being explored"""
 
+    # initializes dungeon object
     def __init__(self):
-        self.current_difficulty = self._set_difficulty()
-        self.bounds = self._set_bounds(self.current_difficulty)
-        self.dungeon = [] # dungeon will be best as a list of floors, floors are a list of coordinate tuples
-        self.current_floor = 0
+        self.current_difficulty = self._set_difficulty()        # sets the dungeon difficulty level by calling setter
+        self.settings = self.defaults(self.current_difficulty)  #
+        
+        self.bounds = self._set_bounds(self.current_difficulty) # sets the dungoun boundaries based on selected dificulty level
+        self.dungeon = []                                       # initializes dungeon list
+        self.current_floor = 0                                  # initializes display floor
 
-        self._create_dungeon(self.bounds)
+        self._create_dungeon(self.current_difficulty)           # creates dungeon as directed
+        
+        if (self.current_difficulty == constant.TUTORIAL):      # creates tutorial if selected
+            self._create_tutorial()
 
+    # directs how the dungeon should be printed, when a string representation is called for
     def __str__(self):
         stringify_dung = constant.STARBAR
         stringify_dung += ("You are on level " + str(self.current_floor + 1) + " of the dungeon.\n")
@@ -29,6 +39,7 @@ class dungeon(object):
                            + " = Stairs Down    " + constant.STAIRS_UP + " = Stairs Up\n\n")
         return stringify_dung
 
+    # interactive method to determine dungeon difficulty
     def _set_difficulty(self):
         print("\nPlease select your difficulty level. If you've never played before the tutorial\n"
             + "is highly recommended for explaining basic commands and mechanics. If you ever \n"
@@ -37,8 +48,9 @@ class dungeon(object):
             + "\t" + str(constant.EASY) + ": Easy\n"
             + "\t" + str(constant.NORMAL) + ": Normal\n"
             + "\t" + str(constant.HARD) + ": Hard\n")
-        return validation.intInput(1,4)
+        return validation.int_input(1,4)
 
+    # sets the bounds based on difficulty level
     def _set_bounds(self, difficulty):
         if(difficulty == constant.TUTORIAL):
             return constant.TUTORIAL_DIMENSION
@@ -48,26 +60,45 @@ class dungeon(object):
             return constant.NORMAL_DIMENSION_MAX
         if(difficulty == constant.HARD):
             return constant.HARD_DIMENSION_MAX
+    
+    # generates a tutorial dungeon
+    def _create_tutorial(self):
+        qty_stairs_down = 1
+        qty_treasure = 1
+        qty_key = 1
+        qty_traps = 1
+        qty_small_rock = 1
+        qty_boulder = 1
+        qty_portal = 1
 
-    #creates dungeon
-    def _create_dungeon(self, bounds):
+        self.dungeon[0]._update_square(0, 0, constant.PLAYER)                   # Place player at starting locaiton
+        
+        floor = 0
+        while (floor < self.bounds - 1):
+            _place_object(floor, qty_stairs_down, constant.STAIRS_DOWN)         # Place downward stairs where logical
+        
+        # Place 2nd floor tutorial objects
+        self.dungeon[1]._place_object(sty_treasure, constant.TREASURE)          # Place treasure on 2nd floor
+        self.dungeon[1]._place_object(qty_key, constant.KEY)                    # Place key on 2nd floor
+        # Place 3rd floor tutorial objects
+        self.dungeon[2]._place_object(qty_traps, constant.TRAP)                 # Place trap on 3rd floor
+        self.dungeon[2]._place_object(qty_small_rock, constant.SMALL_BOULDER)   # Place small rock on 3rd floor
+        self.dungeon[2]._place_object(qty_boulder, constant.BOULDER)            # Place small rock on 3rd floor
+        # Place 4th floor tutorial objects
+        self.dungeon[3]._place_object(qty_portal, constant.PORTAL)              # Place portal on final floor
+        
+    # creates dungeon
+    def _create_dungeon(self):
         floor_num = 0
-        while floor_num < bounds:
-            self.dungeon.append(self.dungeon_floor(bounds, floor_num))
+        while floor_num < self.bounds:
+            self.dungeon.append(self.dungeon_floor(self.bounds, floor_num))
             floor_num += 1
 
-    # generates empty spaces
+    # generates an individual dungeon floor
     class dungeon_floor(object):
         def __init__(self, bounds, floor_number):
             self.bounds = bounds
             self.this_floor = []
-            self.stairs_down = 1
-            self.treasure = 1
-            self.key = 1
-            self.traps = 1
-            self.small_rock = 1
-            self.boulder = 1
-            self.portal = 1
 
             self._create_floor()
 
@@ -117,3 +148,40 @@ class dungeon(object):
                 this_row.append(constant.EMPTY_SPACE)
                 square_num += 1
             return this_row
+
+        # places an item in a specific location
+        def _update_square(self, x, y, symbol):
+            self.this_floor[y][x] = symbol
+
+        # places items in random locations
+        def _place_object(quantity, symbol):
+            int             x_axis,
+                            y_axis;
+
+            for (int i = 0; i < quantity_object; i++)
+            {
+                x_axis = (rand() % bounds);
+                y_axis = (rand() % bounds);
+
+                if (target_object != TREASURE &&
+                           too_close(dungeon, current_floor, bounds, x_axis, y_axis, TREASURE))
+                {
+                    i--;
+                } else if ( dungeon[current_floor][x_axis][y_axis] != EMPTY_SPACE ||
+                            too_close(dungeon, current_floor, bounds, x_axis, y_axis, PLAYER) ||
+                            too_close(dungeon, current_floor, bounds, x_axis, y_axis, STAIRS_DOWN) ||
+                            too_close(dungeon, current_floor, bounds, x_axis, y_axis, PORTAL))
+                // if there's already something there, don't put a trap there, try again
+                // if it's out of bounds, don't attempt to put a trap there, try again
+                // if it's too close to the treasure (within 1 square), don't put a trap there, try again
+                // if it's too close to the player's starting point, don't put a trap there, try again
+                // the purpose of the buffer around player and treasure is to minimize the likelihood of an unwinnable game due to random generation
+                {
+                    i--;
+                }
+                else
+                {
+                    dungeon[current_floor][x_axis][y_axis] = target_object;
+                }
+            }
+        }
