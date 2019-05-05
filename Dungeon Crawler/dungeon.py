@@ -14,13 +14,12 @@ class dungeon(object):
     # initializes dungeon object
     def __init__(self):
         self.current_difficulty = self._set_difficulty()        # sets the dungeon difficulty level by calling setter
-        self.settings = self.defaults(self.current_difficulty)  #
         
         self.bounds = self._set_bounds(self.current_difficulty) # sets the dungoun boundaries based on selected dificulty level
         self.dungeon = []                                       # initializes dungeon list
         self.current_floor = 0                                  # initializes display floor
 
-        self._create_dungeon(self.current_difficulty)           # creates dungeon as directed
+        self._create_dungeon()                                  # creates dungeon as directed
         
         if (self.current_difficulty == constant.TUTORIAL):      # creates tutorial if selected
             self._create_tutorial()
@@ -75,7 +74,7 @@ class dungeon(object):
         
         floor = 0
         while (floor < self.bounds - 1):
-            _place_object(floor, qty_stairs_down, constant.STAIRS_DOWN)         # Place downward stairs where logical
+            self.dungeon[0]._place_object(qty_stairs_down, constant.STAIRS_DOWN)         # Place downward stairs where logical
         
         # Place 2nd floor tutorial objects
         self.dungeon[1]._place_object(sty_treasure, constant.TREASURE)          # Place treasure on 2nd floor
@@ -134,6 +133,31 @@ class dungeon(object):
                     floor_row += 1
             return stringify_floor
 
+        # places items in random locations
+        def _place_object(self, quantity, symbol):
+            random.seed()
+            count = 0
+            
+            for count in range(0, quantity):
+                x_axis = (random.randint(0, (self.bounds - 1)))
+                y_axis = (random.randint(0, (self.bounds - 1)))
+
+# fix me!                if (symbol != TREASURE and
+# fix me!                           validation.too_close(dungeon, current_floor, bounds, x_axis, y_axis, constant.TREASURE)):
+# fix me!                    count -= 1
+# fix me!                elif ( dungeon[self.this_floor][y_axis][x_axis] != EMPTY_SPACE or
+# fix me!                      validation.too_close(dungeon, self.this_floor, self.bounds, x_axis, y_axis, constant.PLAYER) or
+# fix me!                      validation.too_close(dungeon, self.this_floor, self.bounds, x_axis, y_axis, constant.STAIRS_DOWN) or
+# fix me!                      validation.too_close(dungeon, self.this_floor, self.bounds, x_axis, y_axis, constant.PORTAL)):
+                # if there's already something there, don't put a trap there, try again
+                # if it's out of bounds, don't attempt to put a trap there, try again
+                # if it's too close to the treasure (within 1 square), don't put a trap there, try again
+                # if it's too close to the player's starting point, don't put a trap there, try again
+                # the purpose of the buffer around player and treasure is to minimize the likelihood of an unwinnable game due to random generation
+# fix me!                    count -=1
+# fix me!                else:
+                self._update_square(x_axis, y_axis, symbol)
+
         # Populates the dungeon floor with empty dungeon spaces
         def _create_floor(self):
             row_num = 0
@@ -152,36 +176,3 @@ class dungeon(object):
         # places an item in a specific location
         def _update_square(self, x, y, symbol):
             self.this_floor[y][x] = symbol
-
-        # places items in random locations
-        def _place_object(quantity, symbol):
-            int             x_axis,
-                            y_axis;
-
-            for (int i = 0; i < quantity_object; i++)
-            {
-                x_axis = (rand() % bounds);
-                y_axis = (rand() % bounds);
-
-                if (target_object != TREASURE &&
-                           too_close(dungeon, current_floor, bounds, x_axis, y_axis, TREASURE))
-                {
-                    i--;
-                } else if ( dungeon[current_floor][x_axis][y_axis] != EMPTY_SPACE ||
-                            too_close(dungeon, current_floor, bounds, x_axis, y_axis, PLAYER) ||
-                            too_close(dungeon, current_floor, bounds, x_axis, y_axis, STAIRS_DOWN) ||
-                            too_close(dungeon, current_floor, bounds, x_axis, y_axis, PORTAL))
-                // if there's already something there, don't put a trap there, try again
-                // if it's out of bounds, don't attempt to put a trap there, try again
-                // if it's too close to the treasure (within 1 square), don't put a trap there, try again
-                // if it's too close to the player's starting point, don't put a trap there, try again
-                // the purpose of the buffer around player and treasure is to minimize the likelihood of an unwinnable game due to random generation
-                {
-                    i--;
-                }
-                else
-                {
-                    dungeon[current_floor][x_axis][y_axis] = target_object;
-                }
-            }
-        }

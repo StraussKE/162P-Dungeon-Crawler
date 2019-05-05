@@ -8,7 +8,6 @@ import dungeon
 
 
 def main():
-    random.seed()
     playing = True
 
     helper = helpMenu.helpMenu()
