@@ -30,6 +30,9 @@
     <Compile Include="helpMenu.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="player.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="validation.py">
       <SubType>Code</SubType>
     </Compile>

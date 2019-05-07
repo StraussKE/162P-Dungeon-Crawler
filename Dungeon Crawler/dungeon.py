@@ -10,7 +10,9 @@ import helpMenu
 
 class dungeon(object):
     """the dungeon being explored"""
-
+    
+    player = player()   # the player exploring the dungeon/s
+    
     # initializes dungeon object
     def __init__(self):
         self.current_difficulty = self._set_difficulty()        # sets the dungeon difficulty level by calling setter
@@ -59,9 +61,66 @@ class dungeon(object):
             return constant.NORMAL_DIMENSION_MAX
         if(difficulty == constant.HARD):
             return constant.HARD_DIMENSION_MAX
+
+    #accepts layout of the current floor of the dungeon, and the proposed x and y coordinates as well as the object being looked for
+    #tests to see if proposed placement is within one square of designated test object
+    #returns true if object is within one space, returns false if object is not within one space
+    def _too_close (current_floor, bounds, x_axis, y_axis, target_object):
+        if (_out_of_bounds(x_axis, y_axis, bounds, NORTH) == False and checkMove(dungeon, current_floor, x_axis, y_axis, NORTH, target_object) == True):
+            return true
+        if (_out_of_bounds(x_axis, y_axis, bounds, WEST) == False and checkMove(dungeon, current_floor, x_axis, y_axis, WEST, target_object) == True):
+            return true
+        if (_out_of_bounds(x_axis, y_axis, bounds, SOUTH) == False and checkMove(dungeon, current_floor, x_axis, y_axis, SOUTH, target_object) == True):
+            return true
+        if (_out_of_bounds(x_axis, y_axis, bounds, EAST) == False and checkMove(dungeon, current_floor, x_axis, y_axis, EAST, target_object) == True):
+            return true
+        return false
+
+    #accepts the (x,y) coordinates for the intended move or object placement
+    #checks to see if coordinates are within the limits of the array
+    #returns true if coordinates exceed the set bounds, returns false if the coordinates fall within the acceptable range
+    def _out_of_bounds (x_axis, y_axis, movement):
+        moveTarget(x_axis, y_axis, movement)
+        if (x_axis >= self.bounds or x_axis < 0 or y_axis >= self.bounds or y_axis < 0):
+            return true
+        return false
+
+    # Checks to see if square being moved to is viable option
+    def checkMove (position_x, position_y, movement = -5, target_object = constant.EMPTY):
+
+        if (movement == -5):
+            if (self.dungeon[current_floor][position_y][position_x] != target_object):
+                return True
+            else:
+                return False
+        elif (movement == constant.NORTH):
+            if (self.dungeon[current_floor][position_y - 1][position_x] == target_object):
+                return True
+        elif (movement == constant.SOUTH):
+            if (self.dungeon[current_floor][position_y + 1][position_x] == target_object):
+                return True
+        elif (movement == constant.WEST):
+            if (self.dungeon[current_floor][position_y][position_x - 1] == target_object):
+                return True
+        elif (movement == constant.NORTH):
+            if (self.dungeon[current_floor][position_y][position_x + 1] == target_object):
+                return True
+        else:
+            return False
     
+    # Moves an object
+    def move_target (movement, object_x = player.x, object_y = player.y):
+        if (movement == constant.NORTH):
+            object_y -= 1
+        elif (movement == constant.SOUTH):
+            object_y += 1
+        elif (movement == constant.WEST):
+            object_x -= 1
+        elif (movement == constant.EAST):
+            object_x += 1
+
     # generates a tutorial dungeon
-    def _create_tutorial(self):
+ #fix me   def _create_tutorial(self):
         qty_stairs_down = 1
         qty_treasure = 1
         qty_key = 1
@@ -74,10 +133,10 @@ class dungeon(object):
         
         floor = 0
         while (floor < self.bounds - 1):
-            self.dungeon[0]._place_object(qty_stairs_down, constant.STAIRS_DOWN)         # Place downward stairs where logical
+            self.dungeon[0]._place_object(qty_stairs_down, constant.STAIRS_DOWN)# Place downward stairs where logical
         
         # Place 2nd floor tutorial objects
-        self.dungeon[1]._place_object(sty_treasure, constant.TREASURE)          # Place treasure on 2nd floor
+        self.dungeon[1]._place_object(qty_treasure, constant.TREASURE)          # Place treasure on 2nd floor
         self.dungeon[1]._place_object(qty_key, constant.KEY)                    # Place key on 2nd floor
         # Place 3rd floor tutorial objects
         self.dungeon[2]._place_object(qty_traps, constant.TRAP)                 # Place trap on 3rd floor
@@ -143,12 +202,12 @@ class dungeon(object):
                 y_axis = (random.randint(0, (self.bounds - 1)))
 
 # fix me!                if (symbol != TREASURE and
-# fix me!                           validation.too_close(dungeon, current_floor, bounds, x_axis, y_axis, constant.TREASURE)):
+# fix me!                           _too_close(dungeon, current_floor, bounds, x_axis, y_axis, constant.TREASURE)):
 # fix me!                    count -= 1
 # fix me!                elif ( dungeon[self.this_floor][y_axis][x_axis] != EMPTY_SPACE or
-# fix me!                      validation.too_close(dungeon, self.this_floor, self.bounds, x_axis, y_axis, constant.PLAYER) or
-# fix me!                      validation.too_close(dungeon, self.this_floor, self.bounds, x_axis, y_axis, constant.STAIRS_DOWN) or
-# fix me!                      validation.too_close(dungeon, self.this_floor, self.bounds, x_axis, y_axis, constant.PORTAL)):
+# fix me!                      _too_close(dungeon, self.this_floor, self.bounds, x_axis, y_axis, constant.PLAYER) or
+# fix me!                      _too_close(dungeon, self.this_floor, self.bounds, x_axis, y_axis, constant.STAIRS_DOWN) or
+# fix me!                      _too_close(dungeon, self.this_floor, self.bounds, x_axis, y_axis, constant.PORTAL)):
                 # if there's already something there, don't put a trap there, try again
                 # if it's out of bounds, don't attempt to put a trap there, try again
                 # if it's too close to the treasure (within 1 square), don't put a trap there, try again
