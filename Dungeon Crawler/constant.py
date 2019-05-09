@@ -103,7 +103,7 @@ BOULDER_PLAY = {
     TREASURE : ("Peering around your boulder as best you can you spy the gleam of a treasure\n" +
                 "chest in your intended direction. Taking a moment to reflect upon the chances\n" +
                 "of the chest surviving contact with your boulder you reconsider your plans.\n"),
-    LARGE_BOULER : ("You see a boulder of such proportions as to dwarf the one you are currently\n" +
+    LARGE_BOULDER : ("You see a boulder of such proportions as to dwarf the one you are currently\n" +
                     "struggling to carry. You retreat before your boulder can become envious of its\n" +
                     " bigger brother.\n"),
     SMALL_BOULDER : ("You attempt to progress forward but find your progress impeded. When you set\n" +

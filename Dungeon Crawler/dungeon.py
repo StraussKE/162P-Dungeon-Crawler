@@ -11,11 +11,12 @@ from player import player
 
 class dungeon(object):
     """the dungeon being explored"""
-    random.seed()
+
     this_player = player()                                      # the this_player exploring the dungeon/s
     
     # initializes dungeon object
     def __init__(self):
+        random.seed()
         self.current_difficulty = self._set_difficulty()        # sets the dungeon difficulty level by calling setter
         
         self.bounds = self._set_bounds(self.current_difficulty) # sets the dungoun boundaries based on selected dificulty level
@@ -25,14 +26,16 @@ class dungeon(object):
         
         if (self.current_difficulty == constant.TUTORIAL):      # creates tutorial if selected
             self._create_tutorial()
+        else :
+            print("stuff needs to go here still")
 
     # directs how the dungeon should be printed, when a string representation is called for
     def __str__(self):
         stringify_dung = constant.STARBAR
-        stringify_dung += ("You are on level " + str(this_player.z + 1) + " of the dungeon.\n")
+        stringify_dung += ("You are on level " + str(self.this_player.z + 1) + " of the dungeon.\n")
         stringify_dung += (constant.STARBAR + "\n")
 
-        stringify_dung += str(self.dungeon[this_player.z])
+        stringify_dung += str(self.dungeon[self.this_player.z])
 
         stringify_dung += ("\n\nKey:    " + constant.PLAYER + " = Hero    " + constant.TRAP 
                            + " = Trap    " + constant.TREASURE + " = Treasure    "
@@ -62,29 +65,23 @@ class dungeon(object):
         if(difficulty == constant.HARD):
             return constant.HARD_DIMENSION_MAX
 
-    
-
-    
-
     # Checks to see if square being moved to is viable option
     def checkMove (self, position_x, position_y, target_object = constant.EMPTY):
-
         if (target_object == constant.EMPTY):
-            if (self.dungeon[this_player.z][position_y][position_x] != target_object):
+            if (self.dungeon[self.this_player.z][position_y][position_x] != target_object):
                 return True
             else:
                 return False
-        elif ((self.dungeon[this_player.z][position_y][position_x] == target_object)):
+        elif ((self.dungeon[self.this_player.z][position_y][position_x] == target_object)):
             return True
         else:
             return False
     
     # Moves an object
     def move_target (self, movement):
-        
         # Creates test cordinates based on movement
-        test_x = this_player.x
-        test_y = this_player.y
+        test_x = self.this_player.x
+        test_y = self.this_player.y
         if (movement == constant.NORTH):
             test_y -= 1
         elif (movement == constant.SOUTH):
@@ -96,8 +93,9 @@ class dungeon(object):
         else:
             raise ValueError
         
-        if (dungeon[this_player.z].out_of_bounds(test_x, test_y) == False):
-            dungeon[this_player.z]
+        if (dungeon[self.this_player.z].out_of_bounds(test_x, test_y) == False):
+            # dungeon[self.this_player.z]
+            print("acceptable move")
 
         else:
             print("Move not allowed")
@@ -111,12 +109,11 @@ class dungeon(object):
         qty_small_rock = 1
         qty_boulder = 1
         qty_portal = 1
-
-        self.dungeon[0]._update_square(0, 0, this_player)                   # Place this_player at starting locaiton
         
-        floor = 0
-        while (floor < self.bounds - 1):
-            self.dungeon[0]._place_object(qty_stairs_down, constant.STAIRS_DOWN)# Place downward stairs where logical
+        self.dungeon[0]._place_object(1, self.this_player)                # Place this_player at starting location
+        
+        for floor in range(0, 3):
+            self.dungeon[floor]._place_object(qty_stairs_down, constant.STAIRS_DOWN)# Place downward stairs where logical
         
         # Place 2nd floor tutorial objects
         self.dungeon[1]._place_object(qty_treasure, constant.TREASURE)          # Place treasure on 2nd floor
@@ -124,7 +121,7 @@ class dungeon(object):
         # Place 3rd floor tutorial objects
         self.dungeon[2]._place_object(qty_traps, constant.TRAP)                 # Place trap on 3rd floor
         self.dungeon[2]._place_object(qty_small_rock, constant.SMALL_BOULDER)   # Place small rock on 3rd floor
-        self.dungeon[2]._place_object(qty_boulder, constant.BOULDER)            # Place small rock on 3rd floor
+        self.dungeon[2]._place_object(qty_boulder, constant.LARGE_BOULDER)      # Place large rock on 3rd floor
         # Place 4th floor tutorial objects
         self.dungeon[3]._place_object(qty_portal, constant.PORTAL)              # Place portal on final floor
         
@@ -163,10 +160,10 @@ class dungeon(object):
             while (floor_row < self.bounds):
                 floor_column = 0
                 stringify_floor += "|"
-                while floor_column < self.bounds:
-                    stringify_floor += (self.this_floor[floor_row][floor_column] + "|")
+                while floor_column < (self.bounds - 1):
+                    stringify_floor += (str(self.this_floor[floor_row][floor_column]) + " ")
                     floor_column += 1
-                stringify_floor += "\n"
+                stringify_floor += (str(self.this_floor[floor_row][floor_column]) + "|\n")
                 if(floor_row == self.bounds):
                     stringify_floor += perimeter
                 else:
@@ -191,9 +188,9 @@ class dungeon(object):
                 checkMove(propoxed_x - 1, proposed_y, target_object) == True or
                 checkMove(proposed_x, proposed_y + 1, target_object) == True or
                 checkMove(propoxed_x, proposed_y - 1, target_object) == True):
-                return true
+                return True
             else:
-                return false
+                return False
 
         # places items in random locations
         def _place_object(self, quantity, symbol):
@@ -203,6 +200,8 @@ class dungeon(object):
             for count in range(0, quantity):
                 x_axis = (random.randint(0, (self.bounds - 1)))
                 y_axis = (random.randint(0, (self.bounds - 1)))
+                self.this_floor[y_axis][x_axis] = symbol
+                print("I placed " + str(symbol))
 
 # fix me!                if (symbol != TREASURE and
 # fix me!                           _too_close(dungeon, this_player.z, bounds, x_axis, y_axis, constant.TREASURE)):
@@ -218,7 +217,6 @@ class dungeon(object):
                 # the purpose of the buffer around this_player and treasure is to minimize the likelihood of an unwinnable game due to random generation
 # fix me!                    count -=1
 # fix me!                else:
-                self._update_square(x_axis, y_axis, symbol)
 
         # Populates the dungeon floor with empty dungeon spaces
         def _create_floor(self):

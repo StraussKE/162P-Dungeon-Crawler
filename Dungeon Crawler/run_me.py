@@ -4,7 +4,7 @@ import random
 # self defined modules
 # import constant
 import helpMenu
-import dungeon
+from dungeon import dungeon
 
 
 def main():
@@ -15,5 +15,9 @@ def main():
     helper.welcome()
     
     while playing == True:
-        searching_floor = true
+        searching_floor = True
         this_dungeon = dungeon()
+        print(this_dungeon)
+        playing = False
+
+main()

@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>056a1a86-10c3-456a-8fda-e2d39f9db14f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Dungeon_Crawler.py</StartupFile>
+    <StartupFile>run_me.py</StartupFile>
     <SearchPath>..\Dungeon Crawler</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -26,7 +26,7 @@
     <Compile Include="dungeon.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Dungeon_Crawler.py" />
+    <Compile Include="run_me.py" />
     <Compile Include="helpMenu.py">
       <SubType>Code</SubType>
     </Compile>
