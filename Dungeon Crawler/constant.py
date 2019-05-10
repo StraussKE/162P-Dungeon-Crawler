@@ -15,10 +15,10 @@ NORMAL                  = 3
 HARD                    = 4
 
 # Movement Codes
-NORTH                   = 0
-WEST                    = 1
-SOUTH                   = 2
-EAST                    = 3
+SOUTH                   = 0
+EAST                    = 1
+NORTH                   = 2
+WEST                    = 3
 
 # Other features accessible during movement phase
 QUIT                    = 4
@@ -67,6 +67,9 @@ EMPTY                   = '\0'
 STARBAR = '*******************************************************************************\n'
 BOULDER_BLOCK = 'The solemn boulder stands eternal sentinel here. You can not pass.\n'
 TRAP_TRIGGER = "Horrible things happen.  You die.  Game over.  I'm sad, really. \n"
+DUNG_KEY = ("\n\nKey:    " + PLAYER + " = Hero    " + TRAP + " = Trap    " + TREASURE
+                  + " = Treasure    " + SMALL_BOULDER + " = Small Rock\n\t\t" + STAIRS_DOWN +
+                  " = Stairs Down    " + STAIRS_UP + " = Stairs Up\n\n")
 
 
 # Dictionaries
@@ -104,8 +107,8 @@ BOULDER_PLAY = {
                 "chest in your intended direction. Taking a moment to reflect upon the chances\n" +
                 "of the chest surviving contact with your boulder you reconsider your plans.\n"),
     LARGE_BOULDER : ("You see a boulder of such proportions as to dwarf the one you are currently\n" +
-                    "struggling to carry. You retreat before your boulder can become envious of its\n" +
-                    " bigger brother.\n"),
+                     "struggling to carry. You retreat before your boulder can become envious of its\n" +
+                     "bigger brother.\n"),
     SMALL_BOULDER : ("You attempt to progress forward but find your progress impeded. When you set\n" +
                      "your boulder down to discover the cause you discover it pressed close against\n" +
                      "it's twin. You realize with some sorrow that if you wish to go this way you will\n" +

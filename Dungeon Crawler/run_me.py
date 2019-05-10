@@ -3,21 +3,15 @@ import random
 
 # self defined modules
 # import constant
-import helpMenu
-from dungeon import dungeon
 
+from dungeon import dungeon
+from player import player
 
 def main():
-    playing = True
-
-    helper = helpMenu.helpMenu()
-
-    helper.welcome()
-    
-    while playing == True:
-        searching_floor = True
-        this_dungeon = dungeon()
+    this_player = player()
+    this_dungeon = dungeon(this_player)
+    while this_player.playing:
         print(this_dungeon)
-        playing = False
+        this_dungeon.move_target()
 
 main()

@@ -101,7 +101,8 @@ class helpMenu(object):
               "Diagonal motion is not permitted.\n\n"
               "You have two options for controlling your character.\n\n"
               "Left handed control:\tW = up  A = left  S = down  D = right\n"
-              "Right handed control:\t8 = up  4 = left  2 = down  6 = right\n")
+              "Right handed control:\t8 = up  4 = left  2 = down  6 = right\n\n"
+              "At any time you may also select Q to quit or H to access the help menu.\n")
         input("(Press enter to continue)")
         print(constant.STARBAR)
 
