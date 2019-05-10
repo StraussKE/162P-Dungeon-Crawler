@@ -6,7 +6,7 @@ class player(object):
 
     def __init__(self):
         self.playing = True
-        self.on_stairs = False
+        self.on_stairs = "false"
         self.bouler = False
         
         self.x = 0

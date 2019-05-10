@@ -59,21 +59,6 @@ class dungeon(object):
             return constant.NORMAL_DIMENSION_MAX
         if(difficulty == constant.HARD):
             return constant.HARD_DIMENSION_MAX
-
-    # Checks to see if square being moved to is viable option
-    def checkMove (self, position_x, position_y, target_object = constant.EMPTY_SPACE):
-        if (target_object == constant.EMPTY_SPACE):
-            if (self.dungeon[self.this_player.z].this_floor[position_y][position_x] != target_object):
-                print("not_empty")
-                return False
-            else:
-                print("empty")
-                return True
-        elif ((self.dungeon[self.this_player.z].this_floor[position_y][position_x] == target_object)):
-            print("not empty")
-            return True
-        else:
-            return False
     
     # Moves an object
     def move_target (self):
@@ -98,13 +83,28 @@ class dungeon(object):
             raise ValueError
         
         if (self.dungeon[self.this_player.z].out_of_bounds(test_x, test_y) == False):
-            if (self.checkMove(test_x, test_y)):
-                self.dungeon[self.this_player.z].update_square(self.this_player.x, self.this_player.y, test_x, test_y)
-                self.this_player.x = test_x
-                self.this_player.y = test_y
+            if (self.dungeon[self.this_player.z].checkMove(test_x, test_y)):
+                if (self.this_player.on_stairs == "down"):
+                    self.dungeon[self.this_player.z].update_square(self.this_player.x, self.this_player.y, test_x, test_y, constant.STAIRS_DOWN)
+                    self.this_player.on_stairs = "false"
+                elif (self.this_player.on_stairs == "up"):
+                    self.dungeon[self.this_player.z].update_square(self.this_player.x, self.this_player.y, test_x, test_y, constant.STAIRS_UP)
+                    self.this_player.on_stairs = "false"
+                else:
+                    self.dungeon[self.this_player.z].update_square(self.this_player.x, self.this_player.y, test_x, test_y)
                 print("player x = " + str(self.this_player.x) + " player y = " + str(self.this_player.y))
+            elif (self.dungeon[self.this_player.z].checkMove(test_x, test_y, constant.STAIRS_UP)):
+                self.this_player.z -= 1
+                self.dungeon[self.this_player.z].update_square(self.this_player.x, self.this_player.y, test_x, test_y)
+                self.this_player.on_stairs = "down"
+            elif (self.dungeon[self.this_player.z].checkMove(test_x, test_y, constant.STAIRS_DOWN)):
+                self.this_player.z += 1
+                self.dungeon[self.this_player.z].update_square(self.this_player.x, self.this_player.y, test_x, test_y)
+                self.this_player.on_stairs = "up"
             else:
                 print("I don't yet know how to deal with this")
+            self.this_player.x = test_x
+            self.this_player.y = test_y
         else:
             splat = random.randint(0,3)
             print(constant.HIT_WALL_PLAYER[splat])
@@ -191,15 +191,36 @@ class dungeon(object):
             if (proposed_x >= self.bounds or proposed_x < 0 or proposed_y >= self.bounds or proposed_y < 0):
                 return True
             return False
+
+        # Checks to see if square being moved to is viable option
+        def checkMove (self, position_x, position_y, target_object = constant.EMPTY_SPACE):
+            if (target_object == constant.EMPTY_SPACE):
+                if (self.this_floor[position_y][position_x] != target_object):
+                    # Not_empty
+                    return False
+                else:
+                    # Empty
+                    return True
+            elif (self.this_floor[position_y][position_x] == target_object):
+                # Not empty
+                if(target_object == constant.STAIRS_UP):
+                    print("stairs")
+                return True
+            else:
+                # empty
+                return False
         
         #accepts layout of the current floor of the dungeon, and the proposed x and y coordinates as well as the object being looked for
         #tests to see if proposed placement is within one square of designated test object
         #returns true if object is within one space, returns false if object is not within one space
-        def _too_close (self, x_axis, y_axis, target_object):
-            if (checkMove(proposed_x + 1, proposed_y, target_object) == True or
-                checkMove(propoxed_x - 1, proposed_y, target_object) == True or
-                checkMove(proposed_x, proposed_y + 1, target_object) == True or
-                checkMove(propoxed_x, proposed_y - 1, target_object) == True):
+        def _too_close (self, proposed_x, proposed_y, target_object):
+            if (self.out_of_bounds(proposed_x + 1, proposed_y) == False and self.checkMove(proposed_x + 1, proposed_y, target_object) == True):
+                return True
+            elif(self.out_of_bounds(proposed_x - 1, proposed_y) == False and self.checkMove(proposed_x - 1, proposed_y, target_object) == True):
+                return True
+            elif(self.out_of_bounds(proposed_x, proposed_y + 1) == False and self.checkMove(proposed_x, proposed_y + 1, target_object) == True):
+                return True
+            elif(self.out_of_bounds(proposed_x, proposed_y - 1) == False and self.checkMove(proposed_x, proposed_y - 1, target_object) == True):
                 return True
             else:
                 return False
@@ -212,17 +233,23 @@ class dungeon(object):
             for count in range(0, quantity):
                 x_axis = (random.randint(0, (self.bounds - 1)))
                 y_axis = (random.randint(0, (self.bounds - 1)))
-                self.this_floor[y_axis][x_axis] = symbol
-                if (str(symbol) == constant.PLAYER):
-                    symbol.x = x_axis
-                    symbol.y = y_axis
+                if (self.this_floor[y_axis][x_axis] == constant.EMPTY_SPACE):
+                    #if (self._too_close(x_axis, y_axis, constant.STAIRS_DOWN)):
+                    #    count -= 1
+                    #else:
+                        self.this_floor[y_axis][x_axis] = symbol
+                        if (str(symbol) == constant.PLAYER):
+                            symbol.x = x_axis
+                            symbol.y = y_axis
+                else:
+                    count -= 1
 
 # fix me!                if (symbol != TREASURE and
 # fix me!                           _too_close(dungeon, this_player.z, bounds, x_axis, y_axis, constant.TREASURE)):
 # fix me!                    count -= 1
 # fix me!                elif ( dungeon[self.this_floor][y_axis][x_axis] != EMPTY_SPACE or
 # fix me!                      _too_close(dungeon, self.this_floor, self.bounds, x_axis, y_axis, constant.PLAYER) or
-# fix me!                      _too_close(dungeon, self.this_floor, self.bounds, x_axis, y_axis, constant.STAIRS_DOWN) or
+# fix me!  // fixed            _too_close(dungeon, self.this_floor, self.bounds, x_axis, y_axis, constant.STAIRS_DOWN) or
 # fix me!                      _too_close(dungeon, self.this_floor, self.bounds, x_axis, y_axis, constant.PORTAL)):
                 # if there's already something there, don't put a trap there, try again
                 # if it's out of bounds, don't attempt to put a trap there, try again
@@ -248,6 +275,6 @@ class dungeon(object):
             return this_row
 
         # places an item in a specific location
-        def update_square(self, old_x, old_y, new_x, new_y):
+        def update_square(self, old_x, old_y, new_x, new_y, leave_behind = constant.EMPTY_SPACE):
             self.this_floor[new_y][new_x] = self.this_floor[old_y][old_x]
-            self.this_floor[old_y][old_x] = constant.EMPTY_SPACE
+            self.this_floor[old_y][old_x] = leave_behind
