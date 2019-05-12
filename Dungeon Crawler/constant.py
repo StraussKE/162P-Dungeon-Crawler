@@ -79,17 +79,25 @@ TRAP_DISARM = {
     1 : "your boulder drops into a newly exposed acid vat.\n",
     2 : "monstrous scythes drop from above and split your boulder.\n",
     3 : "something underwhelming happens.\n"}
+# Highest index for TRAP_DISARM
+MAX_TRAP_DISARM = len(TRAP_DISARM) - 1
 
+# Text when a player tries to move as small boulder through a wall
 HIT_WALL_BOULDER = {
     0 : "Your efforts to shove the small boulder through the wall are met with resistance\n Please try something else.\n",
     1 : "You are unable to achieve enough force to embed the bounder into the wall.\n Please try something else.\n",
     2 : "You have chosen to attempt something improbable with the boulder.  It failed.\n"}
+# Highest index for HIT_WALL_BOULDER
+MAX_ROCKWALL_INDEX = len(HIT_WALL_BOULDER) - 1
 
+# Text when player tries to go through a wall
 HIT_WALL_PLAYER = {
     0: "With feline stealth the exterior wall suddenly appears in front of you.\nPlease try something else.\n",
     1: "Your jaunty step is thrown off by an abrupt encounter with a sturdy wall.\nPlease try something else.\n",
     2: "Despite your efforts to prove otherwise, the wall is not an illusion.\nPlease try something else.\n",
     3: "Your quixotic effort to slay the wall has only gained you shame.\nPlease try something else.\n"}
+# Highest index for HIT_WALL_PLAYER dictionary
+MAX_SPLAT_INDEX = len(HIT_WALL_PLAYER) - 1
 
 BOULDER_PLAY = {
     PLAYER : ("You begin to enter a room but are unable to bypass a small boulder. It appears\n" +

@@ -16,6 +16,7 @@ class dungeon(object):
     # initializes dungeon object
     def __init__(self, player):
         self.this_player = player
+        self.finished = False
         random.seed()
         self.current_difficulty = self._set_difficulty()        # sets the dungeon difficulty level by calling setter
         
@@ -82,32 +83,48 @@ class dungeon(object):
         else:
             raise ValueError
         
+        # if the player is within the dungeon bounds
         if (self.dungeon[self.this_player.z].out_of_bounds(test_x, test_y) == False):
-            if (self.dungeon[self.this_player.z].checkMove(test_x, test_y)):
-                if (self.this_player.on_stairs == "down"):
-                    self.dungeon[self.this_player.z].update_square(self.this_player.x, self.this_player.y, test_x, test_y, constant.STAIRS_DOWN)
-                    self.this_player.on_stairs = "false"
-                elif (self.this_player.on_stairs == "up"):
-                    self.dungeon[self.this_player.z].update_square(self.this_player.x, self.this_player.y, test_x, test_y, constant.STAIRS_UP)
-                    self.this_player.on_stairs = "false"
+            # test if the square the player is trying to move into is empty is empty
+            if (self.dungeon[self.this_player.z].checkMove(test_x, test_y)):            
+                ## testing for player being on stairs only happens with empty squares due to dungeon
+                ## not permitting things to block stairway access
+                # if the player ascended or descended stairs last turn make sure update_square correctly renders them for the next turn
+                if (self.this_player.on_stairs == constant.STAIRS_DOWN or self.this_player.on_stairs == constant.STAIRS_UP):
+                    self.dungeon[self.this_player.z].update_square(self.this_player.x, self.this_player.y, test_x, test_y, self.this_player.on_stairs)
+                    self.this_player.on_stairs = constant.EMPTY    # togle stair flag off
+                # otherwise just move player
                 else:
                     self.dungeon[self.this_player.z].update_square(self.this_player.x, self.this_player.y, test_x, test_y)
                 print("player x = " + str(self.this_player.x) + " player y = " + str(self.this_player.y))
+            # test if the square the player is trying to move into is empty is an upward stairway
             elif (self.dungeon[self.this_player.z].checkMove(test_x, test_y, constant.STAIRS_UP)):
-                self.this_player.z -= 1
-                self.dungeon[self.this_player.z].update_square(self.this_player.x, self.this_player.y, test_x, test_y)
-                self.this_player.on_stairs = "down"
+                self.this_player.on_stairs = constant.STAIRS_UP
+                self.leave_floor()
             elif (self.dungeon[self.this_player.z].checkMove(test_x, test_y, constant.STAIRS_DOWN)):
-                self.this_player.z += 1
-                self.dungeon[self.this_player.z].update_square(self.this_player.x, self.this_player.y, test_x, test_y)
-                self.this_player.on_stairs = "up"
+                self.this_player.on_stairs = constant.STAIRS_DOWN
+                self.leave_floor()
             else:
                 print("I don't yet know how to deal with this")
             self.this_player.x = test_x
-            self.this_player.y = test_y
+            self.this_player.y = test_y 
+        # Player has attempted to walk into a wall
         else:
-            splat = random.randint(0,3)
-            print(constant.HIT_WALL_PLAYER[splat])
+            splat = random.randint(0, constant.MAX_SPLAT_INDEX) # randomizes which wall hit response user sees this time
+            print(constant.HIT_WALL_PLAYER[splat])              # prints wall it reponse for user
+    
+    def leave_floor(self):
+        self.dungeon[self.this_player.z].this_floor[self.this_player.y][self.this_player.x] = self.this_player.on_stairs
+        if (self.this_player.on_stairs == constant.STAIRS_UP):
+            self.this_player.z -= 1
+            self.this_player.on_stairs = constant.STAIRS_DOWN
+        elif (self.this_player.on_stairs == constant.STAIRS_DOWN):
+            self.this_player.z += 1
+            self.this_player.on_stairs = constant.STAIRS_UP
+        else:
+            print("The leave_floor method should not have been called or was called incorrectly")
+            raise ValueError
+        self.dungeon[self.this_player.z].this_floor[self.this_player.y][self.this_player.x] = self.this_player
 
     # generates a tutorial dungeon
     def _create_tutorial(self):
